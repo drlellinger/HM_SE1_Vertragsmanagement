@@ -92,18 +92,18 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
         
         if (DatabaseContext.Currencys.Any(c => c.Id == cur) is false)
         {
-            return BadRequest("Currency not implemented. Abort.");
+            return StatusCode(501);
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
@@ -152,13 +152,13 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
@@ -190,13 +190,13 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
