@@ -14,5 +14,5 @@ public class Kreditor
     
     public string Bankverbindung { get; set; }
 
-    [Required] public Boolean IsCustomer { get; set; } = true;
+    [Required] public bool IsCustomer { get; set; }
 }

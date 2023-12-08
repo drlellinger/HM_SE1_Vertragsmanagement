@@ -1,7 +1,3 @@
-using System.IO.Enumeration;
-using System.Numerics;
-using Vertragsmanagement.DomainObjects;
-
 namespace Vertragsmanagement.DataAccess;
 
 public class DataCreator
@@ -44,11 +40,6 @@ public class DataCreator
         context.Verträge.Add(new() { Id = 1, Kreditor = 1, Debitor = 1,  Währung = "EUR", IsActive = true, Vertragswert = 15000, NormaleMonatsrate = 1000, Anzahlung = 1000, Abschlussrate = 2000, ZeitpunktNächsteAbbuchung = DateTime.Now.AddDays(14), ValidFrom = DateTime.Now.AddMonths(-1), ValidTo = DateTime.Now.AddYears(1), });
         context.Verträge.Add(new() { Id = 2, Kreditor = 1, Vertragswert = 200000, Währung = "EUR", IsActive = false});
         
-        for (int i = 0; i < context.Kreditoren.Count(); i++)
-        {
-            var adresseInK = context.Kreditoren.Where(k => k.Adresse == i).ToString();
-            System.Console.WriteLine("Test");
-        }
         
         //Änderungen in Datenbank speichern
         context.SaveChanges();

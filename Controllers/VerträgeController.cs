@@ -76,7 +76,6 @@ public class VerträgeController : ControllerBase
         vertrag.Revision = 1;
         DatabaseContext.Verträge.Add(vertrag);
         DatabaseContext.SaveChanges();
-        System.Console.WriteLine(vertrag + "was added.");
         return Ok();
     }
     

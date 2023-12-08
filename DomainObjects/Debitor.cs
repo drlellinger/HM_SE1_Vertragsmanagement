@@ -14,5 +14,5 @@ public class Debitor
     
     [Required] public string Bankverbindung { get; set; }
 
-    [Required] public Boolean IsCustomer { get; set; } = false;
+    [Required] public bool IsCustomer { get; set; } = true;
 }
