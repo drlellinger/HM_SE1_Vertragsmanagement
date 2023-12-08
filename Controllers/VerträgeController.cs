@@ -37,7 +37,25 @@ public class VerträgeController : ControllerBase
     {
         if (ModelState.IsValid is false) return BadRequest(ModelState);
 
+        vertrag.Revision = 1;
         DatabaseContext.Verträge.Add(vertrag);
+        DatabaseContext.SaveChanges();
+        System.Console.WriteLine(vertrag + "was added.");
+        return Ok();
+    }
+
+    [HttpPut]
+    public ActionResult UpdateVertrag([FromBody] Vertrag vertrag)
+    {
+        if (ModelState.IsValid is false) return BadRequest(ModelState);
+
+        if (vertrag.Id == 0) return BadRequest("Id of Vertrag is required when updating a Vertrag");
+
+        var dbVertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertrag.Id);
+        if (dbVertrag == null) return NotFound("Vertrag " + vertrag.Id + "existiert nicht");
+
+        dbVertrag.Update(vertrag); //Methode in Vertrag_DomainObject implementiert
+        
         DatabaseContext.SaveChanges();
         return Ok();
     }
@@ -53,7 +71,7 @@ public class VerträgeController : ControllerBase
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
@@ -92,7 +110,7 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return NotFound("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
         
         if (DatabaseContext.Currencys.Any(c => c.Id == cur) is false)
@@ -103,7 +121,7 @@ public class VerträgeController : ControllerBase
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return NotFound("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
@@ -152,13 +170,13 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return NotFound("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
         if (vertrag == null)
         {
-            return NotFound("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
@@ -190,7 +208,7 @@ public class VerträgeController : ControllerBase
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return NotFound("Vertrag not found");
+            return NotFound("Vertrag " + vertragsId + " not found");
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
