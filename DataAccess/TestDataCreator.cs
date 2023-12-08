@@ -23,10 +23,11 @@ public class TestDataCreator
             { Iban = "DE63500105172644736168", Bic = "ANHODE77", Kontoinhaber = "Bill Gates" });
 
         context.Adressen.Add(new()
-            { Id = 1, Adresszeile1 = "Brückenstraße", Hausnummer = "42", Postleitzahl = "80000", Ort = "München" });
+            { Id = 1, Adresszeile1 = "Brückenstraße", Hausnummer = "42", Postleitzahl = "80000", Ort = "München", InUse = 1});
         context.Adressen.Add(new()
-            { Id = 2, Adresszeile1 = "Treppenweg", Hausnummer = "69", Postleitzahl = "30000", Ort = "Hamburg" });
-        
+            { Id = 2, Adresszeile1 = "Treppenweg", Hausnummer = "69", Postleitzahl = "30000", Ort = "Hamburg", InUse = 1});
+        context.Adressen.Add(new()
+            { Id = 3, Adresszeile1 = "Holzweg", Hausnummer = "3", Postleitzahl = "70000", Ort = "Stuttgart", InUse = 0});
         
         context.Kreditoren.Add(new() { Id=1, Name = " Turing", Vorname = "Alan", IsCustomer = true, Bankverbindung = "DE000000000000000000000000", Adresse = 1});
         context.Debitoren.Add(new() { Id=1, Name = "Gates" , Vorname = "Bill", IsCustomer = false, Bankverbindung = "DE000000000000000000020000"});

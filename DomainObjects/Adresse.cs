@@ -14,7 +14,16 @@ public class Adresse
     public string Postleitzahl { get; set; }
     
     public string Ort { get; set; }
-
     
+    public int InUse { get; set; }
+
+    public void Update(Adresse other)
+    {
+        this.Adresszeile1 = Adresszeile1;
+        this.Adresszeile2 = Adresszeile2;
+        this.Hausnummer = Hausnummer;
+        this.Postleitzahl = Postleitzahl;
+        this.Ort = Ort;
+    }
 
 }

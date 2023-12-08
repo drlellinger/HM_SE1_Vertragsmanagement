@@ -20,7 +20,7 @@ public class Vertrag
         this.ValidTo = ValidTo;
         this.Vertragsdauer = TimeSpan.FromTicks(ValidTo.Ticks) - TimeSpan.FromTicks(ValidFrom.Ticks);
         
-    }
+    } //Update-Methode
 
     [Key] public int Id { get; set; }
 

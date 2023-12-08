@@ -77,6 +77,17 @@ public class KreditorenController : ControllerBase
     {
         if (ModelState.IsValid is false) return BadRequest(ModelState);
 
+        int adresseId = kreditor.Adresse;
+        var adresse = DatabaseContext.Adressen.FirstOrDefault(a => a.Id == adresseId);
+        if (adresse == null)
+        {
+            return BadRequest("Adresse is not found");
+        }
+        else
+        {
+            adresse.InUse++;
+        }
+        
         DatabaseContext.Kreditoren.Add(kreditor);
         DatabaseContext.SaveChanges();
         return Ok();
