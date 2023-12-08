@@ -1,0 +1,856 @@
+openapi: 3.0.1
+info:
+  title: Vertragsmanagement
+  version: '1.0'
+paths:
+  /adressen:
+    get:
+      tags:
+        - Adressen
+      summary: Gibt alle gespeicherten Adressen aus
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adresse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adresse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adresse'
+    post:
+      tags:
+        - Adressen
+      summary: Fügt Adresse hinzu
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Adressen
+      summary: Ändert vorhandene Adresse
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Adresse'
+      responses:
+        '200':
+          description: Success
+  /adressen/{adressId}:
+    delete:
+      tags:
+        - Adressen
+      summary: Löscht die angegebene Adresse anhand der Adress-ID
+      parameters:
+        - name: adressId
+          in: path
+          description: Adress-ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /bankverbindungen:
+    get:
+      tags:
+        - Bankverbindungen
+      summary: Gibt alle Bankverbindungen aus
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+    post:
+      tags:
+        - Bankverbindungen
+      summary: Fügt Bankverbindung hinzu
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Bankverbindungen
+      summary: Ändert vorhandene Bankverbindung
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Bankverbindung'
+      responses:
+        '200':
+          description: Success
+  /bankverbindungen/search:
+    get:
+      tags:
+        - Bankverbindungen
+      summary: Suche nach Bankverbindungen anhand von Schlagwörtern
+      parameters:
+        - name: searchString
+          in: query
+          description: Sucheingabe
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bankverbindung'
+  /bankverbindungen/{iban}:
+    get:
+      tags:
+        - Bankverbindungen
+      summary: Gibt die Zahlungsinformationen anhand einer IBAN aus
+      parameters:
+        - name: iban
+          in: path
+          description: IBAN der Bankverbindung
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Bankverbindung'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bankverbindung'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Bankverbindung'
+    delete:
+      tags:
+        - Bankverbindungen
+      summary: Löscht die Bankverbindung
+      parameters:
+        - name: iban
+          in: path
+          description: IBAN der Bankverbindung
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /debitoren:
+    get:
+      tags:
+        - Debitoren
+      summary: Gibt alle Debitoren aus
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+    post:
+      tags:
+        - Debitoren
+      summary: Fügt einen Debitor hinzu
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+      responses:
+        '200':
+          description: Success
+  /debitoren/search:
+    get:
+      tags:
+        - Debitoren
+      summary: Suche nach Debitoren anhand von Schlagwörtern
+      parameters:
+        - name: searchString
+          in: query
+          description: Sucheingabe
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debitor'
+  /debitoren/{debitorId}:
+    get:
+      tags:
+        - Debitoren
+      summary: Gibt Debitoren anhand von der Debitoren-Nummer aus
+      parameters:
+        - name: debitorId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Debitor'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debitor'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Debitor'
+  /kreditoren:
+    get:
+      tags:
+        - Kreditoren
+      summary: Gibt alle Kreditoren aus
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+    post:
+      tags:
+        - Kreditoren
+      summary: Fügt einen Kreditor hinzu
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+      responses:
+        '200':
+          description: Success
+  /kreditoren/search:
+    get:
+      tags:
+        - Kreditoren
+      summary: Suche nach Kreditoren anhand von Schlagwörtern
+      parameters:
+        - name: searchString
+          in: query
+          description: Sucheingabe
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kreditor'
+  /kreditoren/{kreditorId}:
+    get:
+      tags:
+        - Kreditoren
+      summary: Gibt Kreditoren anhand von der Kreditoren-Nummer aus
+      parameters:
+        - name: kreditorId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+  /vertraege:
+    get:
+      tags:
+        - Verträge
+      summary: Gibt alle Verträge aus
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vertrag'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vertrag'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vertrag'
+    post:
+      tags:
+        - Verträge
+      summary: Fügt Vertrag hinzu
+      requestBody:
+        description: Vertrag
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Verträge
+      summary: Ändert den Vertrag mithilfe der selbst angegebenen Parameter
+      requestBody:
+        description: Vertrag
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Vertrag'
+      responses:
+        '200':
+          description: Success
+  /vertraege/{vertragId}:
+    get:
+      tags:
+        - Verträge
+      summary: Gibt einen Vertrag anhand der Vertrags-Nummer aus
+      parameters:
+        - name: vertragId
+          in: path
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Vertrag'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vertrag'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Vertrag'
+  /vertraege/{vertragId}/kaufoption:
+    get:
+      tags:
+        - Verträge
+      summary: Gibt zurück, ob eine Kaufoption besteht
+      parameters:
+        - name: vertragId
+          in: path
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+  /vertraege/payAnzahlung:
+    put:
+      tags:
+        - Verträge
+      summary: Bezahlt die Anzahlung
+      parameters:
+        - name: vertragsId
+          in: query
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pay
+          in: query
+          description: Summe eingehende Zahlung
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: cur
+          in: query
+          description: Währung der eingehenden Zahlung
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /vertraege/payAbschlussrate:
+    put:
+      tags:
+        - Verträge
+      summary: Bezahlt die Abschlussrate.
+      parameters:
+        - name: vertragsId
+          in: query
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pay
+          in: query
+          description: Summe eingehende Zahlung
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: cur
+          in: query
+          description: Währung der eingehenden Zahlung
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /vertraege/payMonatsrate:
+    put:
+      tags:
+        - Verträge
+      summary: Bezahlt die Monatsrate
+      parameters:
+        - name: vertragsId
+          in: query
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pay
+          in: query
+          description: Summe eingehende Zahlung
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: cur
+          in: query
+          description: Währung der eingehenden Zahlung
+          required: true
+          schema:
+            type: string
+        - name: regular
+          in: query
+          description: Gibt an, ob die Monatsrate regulär (also über Lastschrifteinzug und pünktlich) überwiesen wurde und somit der Zeitpunkt für die nächste reguläre Abbuchung einen Monat später angesetzt wird
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  /vertraege/setNextBalance:
+    put:
+      tags:
+        - Verträge
+      summary: Setzt die abzubuchende Summe im Vertrag
+      parameters:
+        - name: vertragsId
+          in: query
+          description: Vertragsnummer
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    Adresse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        adresszeile1:
+          type: string
+          nullable: true
+        adresszeile2:
+          type: string
+          nullable: true
+        hausnummer:
+          type: string
+          nullable: true
+        postleitzahl:
+          type: string
+          nullable: true
+        ort:
+          type: string
+          nullable: true
+        inUse:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Bankverbindung:
+      required:
+        - kontoinhaber
+      type: object
+      properties:
+        iban:
+          type: string
+          nullable: true
+        bic:
+          type: string
+          nullable: true
+        kontoinhaber:
+          minLength: 1
+          type: string
+        inUse:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Debitor:
+      required:
+        - bankverbindung
+        - isCustomer
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          minLength: 1
+          type: string
+        vorname:
+          type: string
+          nullable: true
+        adresse:
+          type: integer
+          format: int32
+        bankverbindung:
+          minLength: 1
+          type: string
+        isCustomer:
+          type: boolean
+      additionalProperties: false
+    Kreditor:
+      required:
+        - isCustomer
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          minLength: 1
+          type: string
+        vorname:
+          type: string
+          nullable: true
+        adresse:
+          type: integer
+          format: int32
+        bankverbindung:
+          type: string
+          nullable: true
+        isCustomer:
+          type: boolean
+      additionalProperties: false
+    TimeSpan:
+      type: object
+      properties:
+        ticks:
+          type: integer
+          format: int64
+        days:
+          type: integer
+          format: int32
+          readOnly: true
+        hours:
+          type: integer
+          format: int32
+          readOnly: true
+        milliseconds:
+          type: integer
+          format: int32
+          readOnly: true
+        microseconds:
+          type: integer
+          format: int32
+          readOnly: true
+        nanoseconds:
+          type: integer
+          format: int32
+          readOnly: true
+        minutes:
+          type: integer
+          format: int32
+          readOnly: true
+        seconds:
+          type: integer
+          format: int32
+          readOnly: true
+        totalDays:
+          type: number
+          format: double
+          readOnly: true
+        totalHours:
+          type: number
+          format: double
+          readOnly: true
+        totalMilliseconds:
+          type: number
+          format: double
+          readOnly: true
+        totalMicroseconds:
+          type: number
+          format: double
+          readOnly: true
+        totalNanoseconds:
+          type: number
+          format: double
+          readOnly: true
+        totalMinutes:
+          type: number
+          format: double
+          readOnly: true
+        totalSeconds:
+          type: number
+          format: double
+          readOnly: true
+      additionalProperties: false
+    Vertrag:
+      required:
+        - validFrom
+        - währung
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+          nullable: true
+        author:
+          type: string
+          nullable: true
+        validFrom:
+          type: string
+          format: date-time
+        revision:
+          type: integer
+          format: int32
+        validTo:
+          type: string
+          format: date-time
+        debitor:
+          type: integer
+          format: int32
+        kreditor:
+          type: integer
+          format: int32
+        isActive:
+          type: boolean
+        normaleMonatsrate:
+          type: number
+          format: double
+        anzahlung:
+          type: number
+          format: double
+        zeitpunktAnzahlung:
+          type: string
+          format: date-time
+        abschlussrate:
+          type: number
+          format: double
+        zeitpunktAbschlussrate:
+          type: string
+          format: date-time
+        zeitpunktLetzteAbbuchung:
+          type: string
+          format: date-time
+        summeNächsteAbbuchung:
+          type: number
+          format: double
+        zeitpunktNächsteAbbuchung:
+          type: string
+          format: date-time
+        vertragsdauer:
+          $ref: '#/components/schemas/TimeSpan'
+        vertragswert:
+          type: number
+          format: double
+        währung:
+          minLength: 1
+          type: string
+      additionalProperties: false
