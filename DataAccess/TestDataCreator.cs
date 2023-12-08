@@ -18,12 +18,14 @@ public class TestDataCreator
         context.Currencys.Add(new() { Id = "RUB", Name = "Russischer Rubel" });
         
         context.Bankverbindungen.Add(new()
-            { Iban = "DE000000000000000000000000", Bic = "DEGENOSOOS", Kontoinhaber = "Alan Turing" });
+            { Iban = "DE24500105173764984632", Bic = "GENODE51AGR", Kontoinhaber = "Alan Turing" });
         context.Bankverbindungen.Add(new()
-            { Iban = "DE000000000000000000020000", Bic = "DEGENOSAAS", Kontoinhaber = "Bill Gates" });
+            { Iban = "DE63500105172644736168", Bic = "ANHODE77", Kontoinhaber = "Bill Gates" });
 
         context.Adressen.Add(new()
-            { Id = 1, Adresszeile1 = "Brückenstraße", Hausnummer = "42", Postleitzahl = "80000", Ort = "Manchester" });
+            { Id = 1, Adresszeile1 = "Brückenstraße", Hausnummer = "42", Postleitzahl = "80000", Ort = "München" });
+        context.Adressen.Add(new()
+            { Id = 2, Adresszeile1 = "Treppenweg", Hausnummer = "69", Postleitzahl = "30000", Ort = "Hamburg" });
         
         
         context.Kreditoren.Add(new() { Id=1, Name = " Turing", Vorname = "Alan", IsCustomer = true, Bankverbindung = "DE000000000000000000000000", Adresse = 1});

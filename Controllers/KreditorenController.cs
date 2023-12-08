@@ -14,6 +14,11 @@ public class KreditorenController : ControllerBase
         this.DatabaseContext = dbc;
     }
 
+    
+    /// <summary>
+    /// Gibt alle Kreditoren aus
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public ActionResult<Kreditor[]> GetAllKreditoren()
     {
@@ -21,6 +26,12 @@ public class KreditorenController : ControllerBase
         return Ok(allKreditoren);
     }
     
+    
+    /// <summary>
+    /// Suche nach Kreditoren anhand von Schlagwörtern
+    /// </summary>
+    /// <param name="searchString"></param>
+    /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Kreditor[]> SearchKreditoren([FromQuery] string searchString)
     {
@@ -47,6 +58,11 @@ public class KreditorenController : ControllerBase
 
     }
     
+    /// <summary>
+    /// Gibt Kreditoren anhand von der Kreditoren-Nummer aus
+    /// </summary>
+    /// <param name="kreditorId"></param>
+    /// <returns></returns>
     [HttpGet("{kreditorId}")]
     public ActionResult<Kreditor> GetKreditorById([FromRoute] int kreditorId)
     {

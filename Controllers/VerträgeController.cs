@@ -17,6 +17,11 @@ public class VerträgeController : ControllerBase
         this.DatabaseContext = dbc;
     }
 
+    
+    /// <summary>
+    /// Gibt alle Verträge aus
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public ActionResult<Vertrag[]> GetAllVerträge()
     {
@@ -24,6 +29,12 @@ public class VerträgeController : ControllerBase
         return Ok(allVerträge);
     }
     
+    
+    /// <summary>
+    /// Gibt einen Vertrag anhand der Vertrags-Nummer aus
+    /// </summary>
+    /// <param name="vertragId">Vertragsnummer</param>
+    /// <returns></returns>
     [HttpGet("{vertragId}")]
     public ActionResult<Vertrag> GetVertragById([FromRoute] int vertragId)
     {
@@ -32,6 +43,12 @@ public class VerträgeController : ControllerBase
         return Ok(vertrag);
     }
     
+    
+    /// <summary>
+    /// Fügt Vertrag hinzu
+    /// </summary>
+    /// <param name="vertrag">Vertrag</param>
+    /// <returns></returns>
     [HttpPost]
     public ActionResult AddVertrag([FromBody] Vertrag vertrag)
     {
@@ -43,7 +60,13 @@ public class VerträgeController : ControllerBase
         System.Console.WriteLine(vertrag + "was added.");
         return Ok();
     }
-
+    
+    
+    /// <summary>
+    /// Ändert den Vertrag mithilfe der selbst angegebenen Parameter
+    /// </summary>
+    /// <param name="vertrag">Vertrag</param>
+    /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateVertrag([FromBody] Vertrag vertrag)
     {
@@ -59,6 +82,7 @@ public class VerträgeController : ControllerBase
         DatabaseContext.SaveChanges();
         return Ok();
     }
+    
     
     [HttpPut("payAnzahlung")]
     public ActionResult PayAnzahlung([FromQuery] int vertragsId, [FromQuery] decimal pay)
@@ -105,6 +129,13 @@ public class VerträgeController : ControllerBase
         return Ok();
     }
     
+    /// <summary>
+    /// Bezahlt die Abschlussrate.
+    /// </summary>
+    /// <param name="vertragsId">Vertragsnummer</param>
+    /// <param name="pay">Summe eingehende Zahlung</param>
+    /// <param name="cur">Währung der eingehenden Zahlung</param>
+    /// <returns></returns>
     [HttpPut("payAbschlussrate")]
     public ActionResult PayAbschlussrate([FromQuery] int vertragsId, [FromQuery] decimal pay, [FromQuery] String cur)
     {
@@ -165,6 +196,8 @@ public class VerträgeController : ControllerBase
         return Ok(notice);
     }
     
+    
+    
     [HttpPut("payMonatsrate")]
     public ActionResult PayMonatsrate([FromQuery] int vertragsId, [FromQuery] decimal pay, [FromQuery] Boolean regular)
     {
@@ -203,6 +236,12 @@ public class VerträgeController : ControllerBase
         return Ok(pay + " " + v.Währung + " was paid. Next payment due on " + v.ZeitpunktNächsteAbbuchung);
     }
     
+    
+    /// <summary>
+    /// Setzt die abzubuchende Summe im Vertrag
+    /// </summary>
+    /// <param name="vertragsId">Vertragsnummer</param>
+    /// <returns></returns>
     [HttpPut("setNextBalance")]
     public ActionResult SetNextBalance([FromQuery] int vertragsId)
     {

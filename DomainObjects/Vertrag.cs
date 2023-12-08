@@ -44,15 +44,15 @@ public class Vertrag
 
     public decimal Anzahlung { get; set; } = 0;
 
-    public DateTime ZeitpunktAnzahlung { get; set; } = DateTime.MinValue;
+    public DateTime ZeitpunktAnzahlung { get; set; }
 
     public decimal Abschlussrate { get; set; } = 0;
     
     public DateTime ZeitpunktAbschlussrate { get; set; }
-    
-    public DateTime ZeitpunktLetzteAbbuchung { get; set; } = DateTime.MinValue;
 
-    public decimal SummeNächsteAbbuchung { get; set; } = 0;
+    public DateTime ZeitpunktLetzteAbbuchung { get; set; }
+
+    public decimal SummeNächsteAbbuchung { get; set; }
 
     public DateTime ZeitpunktNächsteAbbuchung { get; set; }
     

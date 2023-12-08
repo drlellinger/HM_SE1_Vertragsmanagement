@@ -14,6 +14,11 @@ public class DebitorenController : ControllerBase
         this.DatabaseContext = dbc;
     }
 
+    
+    /// <summary>
+    /// Gibt alle Debitoren aus
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public ActionResult<Debitor[]> GetAllDebitoren()
     {
