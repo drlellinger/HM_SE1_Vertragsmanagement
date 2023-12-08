@@ -34,7 +34,8 @@ using (var scope = app.Services.CreateScope())
     using (var dbc = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
     {
         //In DataAccess, dort können Sie Testdaten zur In-Memory-Datenbank hinzufügen
-        TestDataCreator.InitTestData(dbc);
+        DataCreator.InitTestData(dbc);
+        //DataCreator.ValidateDatabase(dbc);
     }
 }
 

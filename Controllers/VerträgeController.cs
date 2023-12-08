@@ -1,7 +1,5 @@
-using System.ComponentModel;
-using System.Runtime.Intrinsics.X86;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Vertragsmanagement.DataAccess;
 using Vertragsmanagement.DomainObjects;
 
@@ -41,6 +39,27 @@ public class VerträgeController : ControllerBase
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragId);
         if (vertrag == null) return NotFound();
         return Ok(vertrag);
+    }
+    
+    /// <summary>
+    /// Gibt zurück, ob eine Kaufoption besteht
+    /// </summary>
+    /// <param name="vertragId">Vertragsnummer</param>
+    /// <returns></returns>
+    [HttpGet("{vertragId}/kaufoption")]
+    public ActionResult<bool> CheckKaufoption([FromRoute] int vertragId)
+    {
+        var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragId);
+        if (vertrag == null) return NotFound();
+
+        if (vertrag.Vertragswert <= vertrag.Abschlussrate)
+        {
+            return Ok(true);
+        }
+        else
+        {
+            return BadRequest(false);
+        }
     }
     
     
@@ -83,13 +102,24 @@ public class VerträgeController : ControllerBase
         return Ok();
     }
     
-    
+    /// <summary>
+    /// Bezahlt die Anzahlung
+    /// </summary>
+    /// <param name="vertragsId">Vertragsnummer</param>
+    /// <param name="pay">Summe eingehende Zahlung</param>
+    /// <param name="cur">Währung der eingehenden Zahlung</param>
+    /// <returns></returns>
     [HttpPut("payAnzahlung")]
-    public ActionResult PayAnzahlung([FromQuery] int vertragsId, [FromQuery] decimal pay)
+    public ActionResult PayAnzahlung([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur)
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
             return BadRequest("Vertrag not found");
+        }
+        
+        if (DatabaseContext.Currencys.Any(c => c.Id == cur) is false)
+        {
+            return StatusCode(501);
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
@@ -99,7 +129,7 @@ public class VerträgeController : ControllerBase
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
-                v.Id == vertragsId
+                v.Id == vertragsId  && v.Währung == cur
             )
             .OrderBy(v => v.ZeitpunktNächsteAbbuchung)
             .ToArray();
@@ -123,6 +153,8 @@ public class VerträgeController : ControllerBase
         {
             return BadRequest("Too much Anzahlung. Abort.");
         }
+
+        v.Vertragswert = v.Vertragswert - pay;
         
         DatabaseContext.SaveChanges();
 
@@ -137,7 +169,7 @@ public class VerträgeController : ControllerBase
     /// <param name="cur">Währung der eingehenden Zahlung</param>
     /// <returns></returns>
     [HttpPut("payAbschlussrate")]
-    public ActionResult PayAbschlussrate([FromQuery] int vertragsId, [FromQuery] decimal pay, [FromQuery] String cur)
+    public ActionResult PayAbschlussrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur)
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
@@ -191,19 +223,33 @@ public class VerträgeController : ControllerBase
             return BadRequest("Too much Anzahlung. Abort.");
         }
         
+        v.Vertragswert = v.Vertragswert - pay;
+        
         DatabaseContext.SaveChanges();
 
         return Ok(notice);
     }
     
     
-    
+    /// <summary>
+    /// Bezahlt die Monatsrate
+    /// </summary>
+    /// <param name="vertragsId">Vertragsnummer</param>
+    /// <param name="pay">Summe eingehende Zahlung</param>
+    /// <param name="cur">Währung der eingehenden Zahlung</param>
+    /// <param name="regular">Gibt an, ob die Monatsrate regulär (also über Lastschrifteinzug und pünktlich) überwiesen wurde und somit der Zeitpunkt für die nächste reguläre Abbuchung einen Monat später angesetzt wird</param>
+    /// <returns></returns>
     [HttpPut("payMonatsrate")]
-    public ActionResult PayMonatsrate([FromQuery] int vertragsId, [FromQuery] decimal pay, [FromQuery] Boolean regular)
+    public ActionResult PayMonatsrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur, [FromQuery] Boolean regular)
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
             return NotFound("Vertrag " + vertragsId + " not found");
+        }
+        
+        if (DatabaseContext.Currencys.Any(c => c.Id == cur) is false)
+        {
+            return StatusCode(501);
         }
 
         var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragsId);
@@ -213,7 +259,7 @@ public class VerträgeController : ControllerBase
         }
 
         var vertragsänderung = DatabaseContext.Verträge.Where(v =>
-                v.Id == vertragsId
+                v.Id == vertragsId  && v.Währung == cur
             )
             .OrderBy(v => v.ZeitpunktNächsteAbbuchung)
             .ToArray();
@@ -231,9 +277,11 @@ public class VerträgeController : ControllerBase
             v.ZeitpunktNächsteAbbuchung = DateTime.Now.AddMonths(1);
         }
         
+        v.Vertragswert = v.Vertragswert - pay;
+        
         DatabaseContext.SaveChanges();
 
-        return Ok(pay + " " + v.Währung + " was paid. Next payment due on " + v.ZeitpunktNächsteAbbuchung);
+        return Ok(pay + " " + v.Währung + " was paid. Restwert: " + v.Vertragswert + cur + " Next payment due on " + v.ZeitpunktNächsteAbbuchung);
     }
     
     
@@ -243,7 +291,7 @@ public class VerträgeController : ControllerBase
     /// <param name="vertragsId">Vertragsnummer</param>
     /// <returns></returns>
     [HttpPut("setNextBalance")]
-    public ActionResult SetNextBalance([FromQuery] int vertragsId)
+    public ActionResult SetNextBalance([FromQuery][Required] int vertragsId)
     {
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {

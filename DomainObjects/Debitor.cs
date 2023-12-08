@@ -10,7 +10,7 @@ public class Debitor
 
     public string Vorname { get; set; }
     
-    public Adresse Adresse { get; set; }
+    public int Adresse { get; set; }
     
     [Required] public string Bankverbindung { get; set; }
 

@@ -1,7 +1,4 @@
-using System.ComponentModel;
-using System.Runtime.Intrinsics.X86;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Vertragsmanagement.DataAccess;
 using Vertragsmanagement.DomainObjects;
 
@@ -42,7 +39,6 @@ public class AdressenController : ControllerBase
         
         DatabaseContext.Adressen.Add(adresse);
         DatabaseContext.SaveChanges();
-        System.Console.WriteLine(adresse + "was added.");
         return Ok();
     }
     

@@ -30,7 +30,7 @@ public class KreditorenController : ControllerBase
     /// <summary>
     /// Suche nach Kreditoren anhand von Schlagwörtern
     /// </summary>
-    /// <param name="searchString"></param>
+    /// <param name="searchString">Sucheingabe</param>
     /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Kreditor[]> SearchKreditoren([FromQuery] string searchString)
@@ -71,7 +71,11 @@ public class KreditorenController : ControllerBase
         return Ok(kreditor);
     }
     
-    
+    /// <summary>
+    /// Fügt einen Kreditor hinzu
+    /// </summary>
+    /// <param name="kreditor"></param>
+    /// <returns></returns>
     [HttpPost]
     public ActionResult AddKreditor([FromBody] Kreditor kreditor)
     {
@@ -85,7 +89,18 @@ public class KreditorenController : ControllerBase
         }
         else
         {
-            adresse.InUse++;
+            adresse.InUse++; //Hier wird der Zähler erhöht
+        }
+        
+        string iban = kreditor.Bankverbindung;
+        var bv = DatabaseContext.Bankverbindungen.FirstOrDefault(b => b.Iban.Equals(iban) );
+        if (bv == null)
+        {
+            return BadRequest("Bankverbindung is not found");
+        }
+        else
+        {
+            bv.InUse++; //Hier wird der Zähler erhöht
         }
         
         DatabaseContext.Kreditoren.Add(kreditor);
