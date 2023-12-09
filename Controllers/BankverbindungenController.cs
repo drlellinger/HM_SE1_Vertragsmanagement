@@ -112,16 +112,26 @@ public class BankverbindungenController : ControllerBase
     /// Löscht die Bankverbindung
     /// </summary>
     /// <param name="iban">IBAN der Bankverbindung</param>
+    /// <param name="force">Force-Parameter</param>
     /// <returns></returns>
     [HttpDelete("{iban}")]
-    public ActionResult DeleteAdress([FromRoute] string iban)
+    public ActionResult DeleteAdress([FromRoute] string iban, [FromQuery] bool force)
     {
         var bv = DatabaseContext.Bankverbindungen.FirstOrDefault(b => b.Iban.Equals(iban));
         if (bv == null) return NotFound();
 
-        if (bv.InUse != 0) return BadRequest("Bankverbindung still in use.");
+        if (bv.InUse != 0 && force==false) return BadRequest("Bankverbindung still in use.");
+        var msg = "";
         
+        if (force)
+        {
+            msg = "Bankverbindung " + iban + " was deleted forcefully.";
+        }
+        else
+        {
+            msg = "Adresse " + iban + " was deleted.";
+        }
         DatabaseContext.SaveChanges();
-        return Ok("Bankverbindung mit der IBAN " + iban + " was deleted.");
+        return Ok(msg);
     }
 }

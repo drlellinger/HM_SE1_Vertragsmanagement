@@ -78,6 +78,11 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: force
+          in: query
+          description: Force-Parameter
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success
@@ -209,6 +214,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: force
+          in: query
+          description: Force-Parameter
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success

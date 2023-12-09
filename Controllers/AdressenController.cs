@@ -68,17 +68,28 @@ public class AdressenController : ControllerBase
     /// Löscht die angegebene Adresse anhand der Adress-ID
     /// </summary>
     /// <param name="adressId">Adress-ID</param>
+    /// <param name="force">Force-Parameter</param>
     /// <returns></returns>
     [HttpDelete("{adressId}")]
-    public ActionResult DeleteAdress([FromRoute] int adressId)
+    public ActionResult DeleteAdress([FromRoute] int adressId, [FromQuery] bool force)
     {
         var adressse = DatabaseContext.Adressen.FirstOrDefault(a => a.Id == adressId);
         if (adressse == null) return NotFound();
 
-        if (adressse.InUse != 0) return BadRequest("Adresse still in use.");
+        if (adressse.InUse != 0 && force==false) return BadRequest("Adresse still in use.");
+
+        var msg = "";
         
+        if (force)
+        {
+            msg = "Adresse " + adressId + " was deleted forcefully.";
+        }
+        else
+        {
+            msg = "Adresse " + adressId + " was deleted.";
+        }
         DatabaseContext.SaveChanges();
-        return Ok("Adresse " + adressId + " was deleted.");
+        return Ok(msg);
     }
     
 }
