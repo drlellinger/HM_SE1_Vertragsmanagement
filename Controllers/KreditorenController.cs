@@ -107,5 +107,25 @@ public class KreditorenController : ControllerBase
         DatabaseContext.SaveChanges();
         return Ok();
     }
+    /// <summary>
+    /// Ändert vorhandenen Kreditor
+    /// </summary>
+    /// <param name="kreditor"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public ActionResult UpdateKreditor([FromBody] Kreditor kreditor)
+    {
+        if (ModelState.IsValid is false) return BadRequest(ModelState);
+
+        if (kreditor.Id == 0) return BadRequest("Id of Kreditor is required when updating a Kreditor");
+
+        var dbKreditor = DatabaseContext.Kreditoren.FirstOrDefault(k => k.Id == kreditor.Id);
+        if (dbKreditor == null) return NotFound("Kreditor " + kreditor.Id + "existiert nicht");
+
+        dbKreditor.Update(kreditor); //Methode in Kreditor_DomainObject implementiert
+        
+        DatabaseContext.SaveChanges();
+        return Ok();
+    }
     
 }

@@ -15,4 +15,13 @@ public class Kreditor
     public string Bankverbindung { get; set; }
 
     [Required] public bool IsCustomer { get; set; }
+    
+    public void Update(Kreditor other)
+    {
+        this.Name = Name;
+        this.Vorname = Vorname;
+        this.Adresse = Adresse;
+        this.Bankverbindung = Bankverbindung;
+        this.IsCustomer = IsCustomer;
+    }
 }

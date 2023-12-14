@@ -106,5 +106,25 @@ public class DebitorenController : ControllerBase
         DatabaseContext.SaveChanges();
         return Ok();
     }
+    /// <summary>
+    /// Ändert vorhandenen Debitor
+    /// </summary>
+    /// <param name="debitor"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public ActionResult UpdateDebitor([FromBody] Debitor debitor)
+    {
+        if (ModelState.IsValid is false) return BadRequest(ModelState);
+
+        if (debitor.Id == 0) return BadRequest("Id of Debitor is required when updating a Debitor");
+
+        var dbDebitor = DatabaseContext.Debitoren.FirstOrDefault(d => d.Id == debitor.Id);
+        if (dbDebitor == null) return NotFound("Debitor " + debitor.Id + "existiert nicht");
+
+        dbDebitor.Update(debitor); //Methode in Debitor_DomainObject implementiert
+        
+        DatabaseContext.SaveChanges();
+        return Ok();
+    }
     
 }
