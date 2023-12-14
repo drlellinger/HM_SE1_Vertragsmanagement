@@ -265,6 +265,25 @@ paths:
       responses:
         '200':
           description: Success
+    put:
+      tags:
+        - Debitoren
+      summary: Ändert vorhandenen Debitor
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Debitor'
+      responses:
+        '200':
+          description: Success
   /debitoren/search:
     get:
       tags:
@@ -349,6 +368,25 @@ paths:
       tags:
         - Kreditoren
       summary: Fügt einen Kreditor hinzu
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Kreditor'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Kreditoren
+      summary: Ändert vorhandenen Kreditor
       requestBody:
         description: ''
         content:
