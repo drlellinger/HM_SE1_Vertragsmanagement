@@ -54,10 +54,10 @@ public class AdressenController : ControllerBase
 
         if (adresse.Id == 0) return BadRequest("Id of Adress is required when updating a Adress");
 
-        var dbAdress = DatabaseContext.Adressen.FirstOrDefault(v => v.Id == adresse.Id);
+        var dbAdress = DatabaseContext.Adressen.FirstOrDefault(a => a.Id == adresse.Id);
         if (dbAdress == null) return NotFound("Adresse " + adresse.Id + "existiert nicht");
 
-        dbAdress.Update(adresse); //Methode in Vertrag_DomainObject implementiert
+        dbAdress.Update(adresse); //Methode in Adresse_DomainObject implementiert
         
         DatabaseContext.SaveChanges();
         return Ok();
