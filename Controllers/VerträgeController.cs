@@ -45,6 +45,9 @@ public class VerträgeController : ControllerBase
     /// Gibt zurück, ob eine Kaufoption besteht
     /// </summary>
     /// <param name="vertragId">Vertragsnummer</param>
+    /// <response code="200">Success. Return true.</response>
+    /// <response code="400">Bad request. Return false.</response>
+    /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpGet("{vertragId}/kaufoption")]
     public ActionResult<bool> CheckKaufoption([FromRoute] int vertragId)
@@ -60,6 +63,42 @@ public class VerträgeController : ControllerBase
         {
             return BadRequest(false);
         }
+    }
+    
+    /// <summary>
+    /// Gibt den Kreditor eines Vertrags aus
+    /// </summary>
+    /// <param name="vertragId"></param>
+    /// <returns></returns>
+    [HttpGet("{vertragId}/kreditor")]
+    public ActionResult<Kreditor> GetKreditorFromVertrag([FromRoute] int vertragId)
+    {
+        var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragId);
+        if (vertrag == null) return NotFound();
+
+        var kreditorId = vertrag.Kreditor;
+        var kreditor = DatabaseContext.Kreditoren.FirstOrDefault(k => k.Id == kreditorId);
+        if (kreditor == null) return StatusCode(500);
+        
+        return Ok(kreditor);
+    }
+    
+    /// <summary>
+    /// Gibt den Debitor eines Vertrags aus
+    /// </summary>
+    /// <param name="vertragId"></param>
+    /// <returns></returns>
+    [HttpGet("{vertragId}/debitor")]
+    public ActionResult<Debitor> GetDebitorFromVertrag([FromRoute] int vertragId)
+    {
+        var vertrag = DatabaseContext.Verträge.FirstOrDefault(v => v.Id == vertragId);
+        if (vertrag == null) return NotFound();
+
+        var debitorId = vertrag.Debitor;
+        var debitor = DatabaseContext.Debitoren.FirstOrDefault(d => d.Id == debitorId);
+        if (debitor == null) return StatusCode(500);
+        
+        return Ok(debitor);
     }
     
     

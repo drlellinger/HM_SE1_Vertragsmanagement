@@ -31,6 +31,7 @@ public class BankverbindungenController : ControllerBase
     /// Suche nach Bankverbindungen anhand von Schlagwörtern
     /// </summary>
     /// <param name="searchString">Sucheingabe</param>
+    /// <response code="418">I'm a teapot. Empty search string.</response>
     /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Bankverbindung[]> SearchBVs([FromQuery] string searchString)
@@ -68,6 +69,8 @@ public class BankverbindungenController : ControllerBase
     /// Gibt die Zahlungsinformationen anhand einer IBAN aus
     /// </summary>
     /// <param name="iban">IBAN der Bankverbindung</param>
+    /// <response code="200">Success. Return IBAN.</response>
+    /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpGet("{iban}")]
     public ActionResult<Bankverbindung> GetBVByIban([FromRoute] string iban)

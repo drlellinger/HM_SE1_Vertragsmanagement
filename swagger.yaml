@@ -178,6 +178,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Bankverbindung'
+        '418':
+          description: I'm a teapot. Empty search string.
   /bankverbindungen/{iban}:
     get:
       tags:
@@ -192,7 +194,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Success
+          description: Success. Return IBAN.
           content:
             text/plain:
               schema:
@@ -203,6 +205,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Bankverbindung'
+        '404':
+          description: Not found
     delete:
       tags:
         - Bankverbindungen
@@ -314,6 +318,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Debitor'
+        '418':
+          description: I'm a teapot. Empty search string.
   /debitoren/{debitorId}:
     get:
       tags:
@@ -329,7 +335,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return Debitor.
           content:
             text/plain:
               schema:
@@ -340,6 +346,38 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Debitor'
+        '404':
+          description: Not found
+  /debitoren/{debitorId}/adresse:
+    get:
+      tags:
+        - Debitoren
+      summary: Gibt Adresse anhand einer Debitoren-Nummer aus
+      parameters:
+        - name: debitorId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success. Return Adresse.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+        '404':
+          description: Not found
+        '500':
+          description: Database error
   /kreditoren:
     get:
       tags:
@@ -432,6 +470,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Kreditor'
+        '418':
+          description: I'm a teapot. Empty search string.
   /kreditoren/{kreditorId}:
     get:
       tags:
@@ -447,7 +487,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return Kreditor.
           content:
             text/plain:
               schema:
@@ -458,6 +498,38 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Kreditor'
+        '404':
+          description: Not found
+  /kreditoren/{kreditorId}/adresse:
+    get:
+      tags:
+        - Kreditoren
+      summary: Gibt Adresse anhand einer Kreditoren-Nummer aus
+      parameters:
+        - name: kreditorId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success. Return Adresse.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Adresse'
+        '404':
+          description: Not found
+        '500':
+          description: Database error
   /vertraege:
     get:
       tags:
@@ -561,7 +633,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return true.
           content:
             text/plain:
               schema:
@@ -572,6 +644,62 @@ paths:
             text/json:
               schema:
                 type: boolean
+        '400':
+          description: Bad request. Return false.
+        '404':
+          description: Not found
+  /vertraege/{vertragId}/kreditor:
+    get:
+      tags:
+        - Verträge
+      summary: Gibt den Kreditor eines Vertrags aus
+      parameters:
+        - name: vertragId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Kreditor'
+  /vertraege/{vertragId}/debitor:
+    get:
+      tags:
+        - Verträge
+      summary: Gibt den Debitor eines Vertrags aus
+      parameters:
+        - name: vertragId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Debitor'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debitor'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Debitor'
   /vertraege/payAnzahlung:
     put:
       tags:

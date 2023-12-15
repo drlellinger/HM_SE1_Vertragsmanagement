@@ -30,6 +30,7 @@ public class DebitorenController : ControllerBase
     /// Suche nach Debitoren anhand von Schlagwörtern
     /// </summary>
     /// <param name="searchString">Sucheingabe</param>
+    /// <response code="418">I'm a teapot. Empty search string.</response>
     /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Debitor[]> SearchDebitoren([FromQuery] string searchString)
@@ -68,6 +69,8 @@ public class DebitorenController : ControllerBase
     /// Gibt Debitoren anhand von der Debitoren-Nummer aus
     /// </summary>
     /// <param name="debitorId"></param>
+    /// <response code="200">Success. Return Debitor.</response>
+    /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpGet("{debitorId}")]
     public ActionResult<Debitor> GetDebitorById([FromRoute] int debitorId)
@@ -75,6 +78,27 @@ public class DebitorenController : ControllerBase
         var debitor = DatabaseContext.Debitoren.FirstOrDefault(d => d.Id == debitorId);
         if (debitor == null) return NotFound();
         return Ok(debitor);
+    }
+    
+    /// <summary>
+    /// Gibt Adresse anhand einer Debitoren-Nummer aus
+    /// </summary>
+    /// <param name="debitorId"></param>
+    /// <response code="200">Success. Return Adresse.</response>
+    /// <response code="404">Not found</response>
+    /// <response code="500">Database error</response>
+    /// <returns></returns>
+    [HttpGet("{debitorId}/adresse")]
+    public ActionResult<Adresse> GetAdresseFromDebitor([FromRoute] int debitorId)
+    {
+        var debitor = DatabaseContext.Debitoren.FirstOrDefault(d => d.Id == debitorId);
+        if (debitor == null) return NotFound();
+
+        var adressId = debitor.Adresse;
+        var adresse = DatabaseContext.Adressen.FirstOrDefault(a => a.Id == adressId);
+        if (adresse == null) return StatusCode(500);
+        
+        return Ok(adresse);
     }
     
     /// <summary>

@@ -31,6 +31,7 @@ public class KreditorenController : ControllerBase
     /// Suche nach Kreditoren anhand von Schlagwörtern
     /// </summary>
     /// <param name="searchString">Sucheingabe</param>
+    /// <response code="418">I'm a teapot. Empty search string.</response>
     /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Kreditor[]> SearchKreditoren([FromQuery] string searchString)
@@ -69,6 +70,8 @@ public class KreditorenController : ControllerBase
     /// Gibt Kreditoren anhand von der Kreditoren-Nummer aus
     /// </summary>
     /// <param name="kreditorId"></param>
+    /// <response code="200">Success. Return Kreditor.</response>
+    /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpGet("{kreditorId}")]
     public ActionResult<Kreditor> GetKreditorById([FromRoute] int kreditorId)
@@ -76,6 +79,28 @@ public class KreditorenController : ControllerBase
         var kreditor = DatabaseContext.Kreditoren.FirstOrDefault(k => k.Id == kreditorId);
         if (kreditor == null) return NotFound();
         return Ok(kreditor);
+    }
+    
+    
+    /// <summary>
+    /// Gibt Adresse anhand einer Kreditoren-Nummer aus
+    /// </summary>
+    /// <param name="kreditorId"></param>
+    /// <response code="200">Success. Return Adresse.</response>
+    /// <response code="404">Not found</response>
+    /// <response code="500">Database error</response>
+    /// <returns></returns>
+    [HttpGet("{kreditorId}/adresse")]
+    public ActionResult<Adresse> GetAdresseFromKreditor([FromRoute] int kreditorId)
+    {
+        var kreditor = DatabaseContext.Kreditoren.FirstOrDefault(k => k.Id == kreditorId);
+        if (kreditor == null) return NotFound();
+
+        var adressId = kreditor.Adresse;
+        var adresse = DatabaseContext.Adressen.FirstOrDefault(a => a.Id == adressId);
+        if (adresse == null) return StatusCode(500);
+        
+        return Ok(adresse);
     }
     
     /// <summary>
