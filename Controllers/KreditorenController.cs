@@ -31,6 +31,7 @@ public class KreditorenController : ControllerBase
     /// Suche nach Kreditoren anhand von Schlagwörtern
     /// </summary>
     /// <param name="searchString">Sucheingabe</param>
+    /// <response code="404">Not found</response>
     /// <response code="418">I'm a teapot. Empty search string.</response>
     /// <returns></returns>
     [HttpGet("search")]
