@@ -35,27 +35,32 @@ public class BankverbindungenController : ControllerBase
     [HttpGet("search")]
     public ActionResult<Bankverbindung[]> SearchBVs([FromQuery] string searchString)
     {
-        var bvSuche = DatabaseContext.Bankverbindungen
-            .Where(b => 
-                b.Iban.ToUpper().Contains(searchString.ToUpper())
-                ||
-                b.Bic.ToUpper().Contains(searchString.ToUpper())
-                ||
-                b.Kontoinhaber.ToUpper().Contains(searchString.ToUpper())
-            )
-            .ToArray();
-
-        string bvResult = bvSuche.ToString();
-
-        if (bvResult != null && !(bvResult.Contains("[]")))
+        try
         {
-            return NotFound("\"" + searchString + "\" is not found");
-        }
-        else
-        {
-            return Ok(bvSuche);
-        }
+            var bvSuche = DatabaseContext.Bankverbindungen
+                .Where(b =>
+                    b.Iban.ToUpper().Contains(searchString.ToUpper())
+                    ||
+                    b.Bic.ToUpper().Contains(searchString.ToUpper())
+                    ||
+                    b.Kontoinhaber.ToUpper().Contains(searchString.ToUpper())
+                )
+                .ToArray();
+            string bvResult = bvSuche.ToString();
 
+            if (bvResult != null && !(bvResult.Contains("[]")))
+            {
+                return NotFound("\"" + searchString + "\" is not found");
+            }
+            else
+            {
+                return Ok(bvSuche);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(418, "Empty search string.");
+        }
     }
     
     

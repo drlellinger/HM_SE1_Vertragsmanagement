@@ -35,25 +35,32 @@ public class KreditorenController : ControllerBase
     [HttpGet("search")]
     public ActionResult<Kreditor[]> SearchKreditoren([FromQuery] string searchString)
     {
-        var kreditoren = DatabaseContext.Kreditoren
-            .Where(k => 
-                // k.Id.ToString().Equals(searchString)
-                // ||
-                k.Name.ToUpper().Contains(searchString.ToUpper())
-                ||
-                k.Vorname.ToUpper().Contains(searchString.ToUpper())
-            )
-            .ToArray();
-
-        string kreditorenResult = kreditoren.ToString();
-
-        if (kreditorenResult != null && !(kreditorenResult.Contains("[]")))
+        try
         {
-            return NotFound("\"" + searchString + "\" is not found");
+            var kreditoren = DatabaseContext.Kreditoren
+                .Where(k =>
+                    // k.Id.ToString().Equals(searchString)
+                    // ||
+                    k.Name.ToUpper().Contains(searchString.ToUpper())
+                    ||
+                    k.Vorname.ToUpper().Contains(searchString.ToUpper())
+                )
+                .ToArray();
+
+            string kreditorenResult = kreditoren.ToString();
+
+            if (kreditorenResult != null && !(kreditorenResult.Contains("[]")))
+            {
+                return NotFound("\"" + searchString + "\" is not found");
+            }
+            else
+            {
+                return Ok(kreditoren);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return Ok(kreditoren);
+            return StatusCode(418, "Empty search string.");
         }
 
     }
