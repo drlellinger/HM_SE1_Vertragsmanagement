@@ -31,7 +31,10 @@ public class BankverbindungenController : ControllerBase
     /// Suche nach Bankverbindungen anhand von Schlagwörtern
     /// </summary>
     /// <param name="searchString">Sucheingabe</param>
+    /// <response code="200">Success.</response>
+    /// <response code="404">Not found</response>
     /// <response code="418">I'm a teapot. Empty search string.</response>
+    /// 
     /// <returns></returns>
     [HttpGet("search")]
     public ActionResult<Bankverbindung[]> SearchBVs([FromQuery] string searchString)
@@ -105,10 +108,10 @@ public class BankverbindungenController : ControllerBase
     {
         if (ModelState.IsValid is false) return BadRequest(ModelState);
 
-        if (bv.Iban is null) return BadRequest("IBAN is required when updating a Adress");
+        if (bv.Iban is null) return BadRequest("IBAN is required when updating a Bankverbindung");
 
         var dbBv = DatabaseContext.Bankverbindungen.FirstOrDefault(b => b.Iban.Equals(bv.Iban));
-        if (dbBv == null) return NotFound("Adresse " + bv.Iban + "existiert nicht");
+        if (dbBv == null) return NotFound("Bankadresse mit der IBAN " + bv.Iban + "existiert noch nicht");
 
         DatabaseContext.Bankverbindungen.Update(bv);        
         DatabaseContext.SaveChanges();
@@ -121,6 +124,8 @@ public class BankverbindungenController : ControllerBase
     /// </summary>
     /// <param name="iban">IBAN der Bankverbindung</param>
     /// <param name="force">Force-Parameter</param>
+    /// <response code="400">Bad request. Bankverbindung still in use.</response>
+    /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpDelete("{iban}")]
     public ActionResult DeleteAdress([FromRoute] string iban, [FromQuery] bool force)
