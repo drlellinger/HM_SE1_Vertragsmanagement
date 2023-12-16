@@ -106,6 +106,7 @@ public class DebitorenController : ControllerBase
     /// Fügt einen Debitor hinzu
     /// </summary>
     /// <param name="debitor"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPost]
     public ActionResult AddDebitor([FromBody] Debitor debitor)
@@ -142,6 +143,7 @@ public class DebitorenController : ControllerBase
     /// Ändert vorhandenen Debitor
     /// </summary>
     /// <param name="debitor"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateDebitor([FromBody] Debitor debitor)

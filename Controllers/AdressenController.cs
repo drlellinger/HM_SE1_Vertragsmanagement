@@ -31,6 +31,7 @@ public class AdressenController : ControllerBase
     /// Fügt Adresse hinzu
     /// </summary>
     /// <param name="adresse"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPost]
     public ActionResult AddAdresse([FromBody] Adresse adresse)
@@ -46,6 +47,7 @@ public class AdressenController : ControllerBase
     /// Ändert vorhandene Adresse
     /// </summary>
     /// <param name="adresse"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateAdress([FromBody] Adresse adresse)
@@ -69,6 +71,8 @@ public class AdressenController : ControllerBase
     /// </summary>
     /// <param name="adressId">Adress-ID</param>
     /// <param name="force">Force-Parameter</param>
+    /// <response code="400">Bad request. Returns error message</response>
+    /// <response code="404">Not found.</response>
     /// <returns></returns>
     [HttpDelete("{adressId}")]
     public ActionResult DeleteAdress([FromRoute] int adressId, [FromQuery] bool force)

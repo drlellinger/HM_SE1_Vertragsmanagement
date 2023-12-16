@@ -87,6 +87,7 @@ public class BankverbindungenController : ControllerBase
     /// Fügt Bankverbindung hinzu
     /// </summary>
     /// <param name="bv"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPost]
     public ActionResult AddBv([FromBody] Bankverbindung bv)
@@ -102,6 +103,7 @@ public class BankverbindungenController : ControllerBase
     /// Ändert vorhandene Bankverbindung
     /// </summary>
     /// <param name="bv"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateBv([FromBody] Bankverbindung bv)

@@ -108,6 +108,7 @@ public class KreditorenController : ControllerBase
     /// Fügt einen Kreditor hinzu
     /// </summary>
     /// <param name="kreditor"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPost]
     public ActionResult AddKreditor([FromBody] Kreditor kreditor)
@@ -144,6 +145,7 @@ public class KreditorenController : ControllerBase
     /// Ändert vorhandenen Kreditor
     /// </summary>
     /// <param name="kreditor"></param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateKreditor([FromBody] Kreditor kreditor)

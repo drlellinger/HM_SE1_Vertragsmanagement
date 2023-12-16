@@ -32,6 +32,8 @@ public class VerträgeController : ControllerBase
     /// Gibt einen Vertrag anhand der Vertrags-Nummer aus
     /// </summary>
     /// <param name="vertragId">Vertragsnummer</param>
+    /// <response code="200">Success. Return Vertrag.</response>
+    /// <response code="404">Not found.</response>
     /// <returns></returns>
     [HttpGet("{vertragId}")]
     public ActionResult<Vertrag> GetVertragById([FromRoute] int vertragId)
@@ -69,6 +71,8 @@ public class VerträgeController : ControllerBase
     /// Gibt den Kreditor eines Vertrags aus
     /// </summary>
     /// <param name="vertragId"></param>
+    /// <response code="200">Success. Return Kreditor.</response>
+    /// <response code="404">Not found.</response>
     /// <returns></returns>
     [HttpGet("{vertragId}/kreditor")]
     public ActionResult<Kreditor> GetKreditorFromVertrag([FromRoute] int vertragId)
@@ -87,6 +91,8 @@ public class VerträgeController : ControllerBase
     /// Gibt den Debitor eines Vertrags aus
     /// </summary>
     /// <param name="vertragId"></param>
+    /// <response code="200">Success. Return Debitor.</response>
+    /// <response code="404">Not found.</response>
     /// <returns></returns>
     [HttpGet("{vertragId}/debitor")]
     public ActionResult<Debitor> GetDebitorFromVertrag([FromRoute] int vertragId)
@@ -106,6 +112,7 @@ public class VerträgeController : ControllerBase
     /// Fügt Vertrag hinzu
     /// </summary>
     /// <param name="vertrag">Vertrag</param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPost]
     public ActionResult AddVertrag([FromBody] Vertrag vertrag)
@@ -123,6 +130,7 @@ public class VerträgeController : ControllerBase
     /// Ändert den Vertrag mithilfe der selbst angegebenen Parameter
     /// </summary>
     /// <param name="vertrag">Vertrag</param>
+    /// <response code="400">Bad request. Returns response body with error.</response>
     /// <returns></returns>
     [HttpPut]
     public ActionResult UpdateVertrag([FromBody] Vertrag vertrag)
@@ -139,20 +147,27 @@ public class VerträgeController : ControllerBase
         DatabaseContext.SaveChanges();
         return Ok();
     }
-    
+
     /// <summary>
     /// Bezahlt die Anzahlung
     /// </summary>
     /// <param name="vertragsId">Vertragsnummer</param>
     /// <param name="pay">Summe eingehende Zahlung</param>
     /// <param name="cur">Währung der eingehenden Zahlung</param>
+    /// <param name="force">Force-Parameter</param>
+    /// <response code="400">Bad request.</response>
+    /// <response code="403">Forbidden. Negative payment is forbidden.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="501">Not implemented.</response>
     /// <returns></returns>
     [HttpPut("payAnzahlung")]
-    public ActionResult PayAnzahlung([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur)
+    public ActionResult PayAnzahlung([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur, [FromQuery]bool force)
     {
+        if (pay < 0 && force == false) return StatusCode(403, "Negative payment is forbidden.");
+        
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
-            return BadRequest("Vertrag not found");
+            return NotFound("Vertrag not found");
         }
         
         if (DatabaseContext.Currencys.Any(c => c.Id == cur) is false)
@@ -189,7 +204,15 @@ public class VerträgeController : ControllerBase
         }
         else if (pay > v.Anzahlung)
         {
-            return BadRequest("Too much Anzahlung. Abort.");
+            if (force)
+            {
+                v.Anzahlung = 0;
+                v.ZeitpunktAnzahlung = DateTime.Now;
+            }
+            else
+            {
+                return BadRequest("Too much Anzahlung. Abort.");
+            }
         }
 
         v.Vertragswert = v.Vertragswert - pay;
@@ -198,17 +221,23 @@ public class VerträgeController : ControllerBase
 
         return Ok();
     }
-    
+
     /// <summary>
     /// Bezahlt die Abschlussrate.
     /// </summary>
     /// <param name="vertragsId">Vertragsnummer</param>
     /// <param name="pay">Summe eingehende Zahlung</param>
     /// <param name="cur">Währung der eingehenden Zahlung</param>
+    /// <param name="force">Force-Parameter</param>
+    /// <response code="403">Forbidden. Negative payment is forbidden.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="501">Not implemented.</response>
     /// <returns></returns>
     [HttpPut("payAbschlussrate")]
-    public ActionResult PayAbschlussrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur)
+    public ActionResult PayAbschlussrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur, [FromQuery]bool force)
     {
+        if (pay < 0 && force == false) return StatusCode(403, "Negative payment is forbidden");
+        
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
             return NotFound("Vertrag " + vertragsId + " not found");
@@ -267,8 +296,8 @@ public class VerträgeController : ControllerBase
 
         return Ok(notice);
     }
-    
-    
+
+
     /// <summary>
     /// Bezahlt die Monatsrate
     /// </summary>
@@ -276,10 +305,16 @@ public class VerträgeController : ControllerBase
     /// <param name="pay">Summe eingehende Zahlung</param>
     /// <param name="cur">Währung der eingehenden Zahlung</param>
     /// <param name="regular">Gibt an, ob die Monatsrate regulär (also über Lastschrifteinzug und pünktlich) überwiesen wurde und somit der Zeitpunkt für die nächste reguläre Abbuchung einen Monat später angesetzt wird</param>
+    /// <param name="force">Force-Parameter</param>
+    /// <response code="403">Forbidden. Negative payment is forbidden.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="501">Not implemented.</response>
     /// <returns></returns>
     [HttpPut("payMonatsrate")]
-    public ActionResult PayMonatsrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur, [FromQuery] Boolean regular)
+    public ActionResult PayMonatsrate([FromQuery][Required] int vertragsId, [FromQuery][Required] decimal pay, [FromQuery][Required] string cur, [FromQuery] Boolean regular, [FromQuery]bool force)
     {
+        if (pay < 0 && force == false) return StatusCode(403, "Negative payment is forbidden");
+        
         if (DatabaseContext.Verträge.Any(v => v.Id == vertragsId) is false)
         {
             return NotFound("Vertrag " + vertragsId + " not found");
@@ -327,6 +362,7 @@ public class VerträgeController : ControllerBase
     /// Setzt die abzubuchende Summe im Vertrag
     /// </summary>
     /// <param name="vertragsId">Vertragsnummer</param>
+    /// <response code="404">Not found.</response>
     /// <returns></returns>
     [HttpPut("setNextBalance")]
     public ActionResult SetNextBalance([FromQuery][Required] int vertragsId)

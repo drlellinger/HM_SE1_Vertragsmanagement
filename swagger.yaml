@@ -46,6 +46,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
     put:
       tags:
         - Adressen
@@ -65,6 +67,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
   /adressen/{adressId}:
     delete:
       tags:
@@ -86,6 +90,10 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns error message
+        '404':
+          description: Not found.
   /bankverbindungen:
     get:
       tags:
@@ -129,6 +137,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
     put:
       tags:
         - Bankverbindungen
@@ -148,6 +158,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
   /bankverbindungen/search:
     get:
       tags:
@@ -161,7 +173,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Success
+          description: Success.
           content:
             text/plain:
               schema:
@@ -178,6 +190,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Bankverbindung'
+        '404':
+          description: Not found
         '418':
           description: I'm a teapot. Empty search string.
   /bankverbindungen/{iban}:
@@ -226,6 +240,10 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Bankverbindung still in use.
+        '404':
+          description: Not found
   /debitoren:
     get:
       tags:
@@ -269,6 +287,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
     put:
       tags:
         - Debitoren
@@ -288,6 +308,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
   /debitoren/search:
     get:
       tags:
@@ -318,6 +340,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Debitor'
+        '404':
+          description: Not found
         '418':
           description: I'm a teapot. Empty search string.
   /debitoren/{debitorId}:
@@ -421,6 +445,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
     put:
       tags:
         - Kreditoren
@@ -440,6 +466,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
   /kreditoren/search:
     get:
       tags:
@@ -470,6 +498,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Kreditor'
+        '404':
+          description: Not found
         '418':
           description: I'm a teapot. Empty search string.
   /kreditoren/{kreditorId}:
@@ -573,6 +603,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
     put:
       tags:
         - Verträge
@@ -592,6 +624,8 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request. Returns response body with error.
   /vertraege/{vertragId}:
     get:
       tags:
@@ -607,7 +641,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return Vertrag.
           content:
             text/plain:
               schema:
@@ -618,6 +652,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Vertrag'
+        '404':
+          description: Not found.
   /vertraege/{vertragId}/kaufoption:
     get:
       tags:
@@ -663,7 +699,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return Kreditor.
           content:
             text/plain:
               schema:
@@ -674,6 +710,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Kreditor'
+        '404':
+          description: Not found.
   /vertraege/{vertragId}/debitor:
     get:
       tags:
@@ -689,7 +727,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: Success. Return Debitor.
           content:
             text/plain:
               schema:
@@ -700,6 +738,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Debitor'
+        '404':
+          description: Not found.
   /vertraege/payAnzahlung:
     put:
       tags:
@@ -726,9 +766,22 @@ paths:
           required: true
           schema:
             type: string
+        - name: force
+          in: query
+          description: Force-Parameter
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad request.
+        '403':
+          description: Forbidden. Negative payment is forbidden.
+        '404':
+          description: Not found.
+        '501':
+          description: Not implemented.
   /vertraege/payAbschlussrate:
     put:
       tags:
@@ -755,9 +808,20 @@ paths:
           required: true
           schema:
             type: string
+        - name: force
+          in: query
+          description: Force-Parameter
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success
+        '403':
+          description: Forbidden. Negative payment is forbidden.
+        '404':
+          description: Not found.
+        '501':
+          description: Not implemented.
   /vertraege/payMonatsrate:
     put:
       tags:
@@ -789,9 +853,20 @@ paths:
           description: Gibt an, ob die Monatsrate regulär (also über Lastschrifteinzug und pünktlich) überwiesen wurde und somit der Zeitpunkt für die nächste reguläre Abbuchung einen Monat später angesetzt wird
           schema:
             type: boolean
+        - name: force
+          in: query
+          description: Force-Parameter
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success
+        '403':
+          description: Forbidden. Negative payment is forbidden.
+        '404':
+          description: Not found.
+        '501':
+          description: Not implemented.
   /vertraege/setNextBalance:
     put:
       tags:
@@ -808,6 +883,8 @@ paths:
       responses:
         '200':
           description: Success
+        '404':
+          description: Not found.
 components:
   schemas:
     Adresse:
