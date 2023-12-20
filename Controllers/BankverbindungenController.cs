@@ -146,6 +146,9 @@ public class BankverbindungenController : ControllerBase
         {
             msg = "Adresse " + iban + " was deleted.";
         }
+
+        DatabaseContext.Bankverbindungen.Remove(bv);
+            
         DatabaseContext.SaveChanges();
         return Ok(msg);
     }

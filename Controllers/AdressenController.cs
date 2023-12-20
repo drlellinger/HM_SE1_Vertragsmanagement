@@ -92,6 +92,9 @@ public class AdressenController : ControllerBase
         {
             msg = "Adresse " + adressId + " was deleted.";
         }
+
+        DatabaseContext.Adressen.Remove(adressse);
+            
         DatabaseContext.SaveChanges();
         return Ok(msg);
     }
