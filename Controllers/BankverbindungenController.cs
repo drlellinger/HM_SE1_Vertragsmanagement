@@ -130,7 +130,7 @@ public class BankverbindungenController : ControllerBase
     /// <response code="404">Not found</response>
     /// <returns></returns>
     [HttpDelete("{iban}")]
-    public ActionResult DeleteAdress([FromRoute] string iban, [FromQuery] bool force)
+    public ActionResult DeleteBv([FromRoute] string iban, [FromQuery] bool force)
     {
         var bv = DatabaseContext.Bankverbindungen.FirstOrDefault(b => b.Iban.Equals(iban));
         if (bv == null) return NotFound();
